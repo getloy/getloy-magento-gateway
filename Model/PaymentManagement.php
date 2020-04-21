@@ -177,7 +177,7 @@ class PaymentManagement implements PaymentManagementInterface
             \Getloy\PaymentProviders::PAYWAY_KH,
             $order,
             $payee,
-            $this->url->getUrl('rest/default/V1/getloy/payment/callback/' . $orderId)
+            $this->url->getUrl('rest/default/V1/getloy/payment/callback/'.$orderId)
         );
     }
 

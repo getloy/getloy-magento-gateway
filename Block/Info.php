@@ -62,7 +62,7 @@ class Info extends ConfigurableInfo
 
         $additionalInfo = $payment->getAdditionalInformation();
         if (array_key_exists('getloy_transaction_id', $additionalInfo)) {
-            $info[ (string)__('Transaction ID') ] = $additionalInfo[
+            $info[ (string) __('Transaction ID') ] = $additionalInfo[
                 'getloy_transaction_id'
             ];
         }
