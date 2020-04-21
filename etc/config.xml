@@ -21,9 +21,9 @@
                 <can_use_internal>1</can_use_internal>
                 <can_authorize>0</can_authorize>
                 <can_capture>0</can_capture>
-                <can_void>0</can_void>
+                <can_void>1</can_void>
                 <can_refund>0</can_refund>
-                <can_cancel>0</can_cancel>
+                <can_cancel>1</can_cancel>
                 <is_gateway>1</is_gateway>
                 <getloy_merchant_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <payway_api_key_test backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
