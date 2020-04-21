@@ -35,13 +35,13 @@ class CurrencyValidator extends AbstractValidator
     public function validate(array $validationSubject)
     {
         $isValid = true;
-        $storeId = $validationSubject['storeId'];
-        $currency = $validationSubject['currency'];
+        $storeId = $validationSubject[ 'storeId' ];
+        $currency = $validationSubject[ 'currency' ];
 
         if ($currency !== $this->config->getValue('currency', $storeId)) {
             $isValid = false;
         }
-        if (!\in_array($currency, ['USD'])) {
+        if (!\in_array($currency, [ 'USD' ])) {
             $isValid = false;
         }
 

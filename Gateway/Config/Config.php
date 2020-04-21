@@ -54,7 +54,7 @@ class Config extends BaseConfig
      */
     public function getAcceptedCurrencies()
     {
-        return ['USD'];
+        return [ 'USD' ];
     }
 
     /**

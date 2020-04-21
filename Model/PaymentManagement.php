@@ -253,16 +253,16 @@ class PaymentManagement implements PaymentManagementInterface
         );
 
         /**
-         * @var \Magento\Sales\Model\Order 
+         * @var \Magento\Sales\Model\Order
          */
         $order = $this->orderRepository->get($orderId);
 
         $order->addStatusHistoryComment(__('PayWay payment session started.'))
             ->save();
 
-        return [[
+        return [ [
             'payload' => $this->generatePayload($quote, $orderId),
-        ]];
+        ] ];
     }
 
     /**
@@ -340,7 +340,10 @@ class PaymentManagement implements PaymentManagementInterface
         $payment->setTransactionId($tid);
         $payment->setCurrencyCode($callbackDetails->currency());
         $payment->registerCaptureNotification($callbackDetails->amountPaid());
-        $order->save();
+        $payment->setAdditionalInformation('getloy_transaction_id', $tid);
+        $payment->setAdditionalInformation('getloy_payment_method', 'PayWay');
+        $payment->setAdditionalInformation('getloy_method_variant', 'default');
+        $payment->save();
 
         /**
          * @var \Magento\Sales\Model\Order\Invoice 
