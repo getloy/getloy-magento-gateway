@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="getloy_magento_gateway" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GetLoy Gateway for Magento</label>
+                <field id="getloy_merchant_key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>GetLoy merchant token</label>
+                    <comment>You will receive this token from GetLoy after setting up your account</comment>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <config_path>payment/getloy_magento_gateway/getloy_merchant_key</config_path>
+                </field>
+                <field id="active" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <comment>You need to enter the GetLoy merchant token and PayWay merchant ID to activate the payment method.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>payment/getloy_magento_gateway/active</config_path>
+                    <requires>
+                        <field id="getloy_merchant_key"/>
+                        <field id="payway_merchant_id"/>
+                    </requires>
+                </field>
+                <field id="sandbox" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sandbox mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>payment/getloy_magento_gateway/sandbox</config_path>
+                </field>
+
+                <group id="getloy_magento_gateway_payway_settings" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>PayWay settings</label>
+                    <field id="payway_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <config_path>payment/getloy_magento_gateway/payway_title</config_path>
+                    </field>
+                    <field id="payway_merchant_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>PayWay merchant ID</label>
+                        <comment>You will receive your merchant ID by email from ABA Bank. It is the same for test and production mode</comment>
+                        <config_path>payment/getloy_magento_gateway/payway_merchant_id</config_path>
+                    </field>
+                    <field id="payway_api_key_test" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>PayWay test API key</label>
+                        <comment>You will receive this key from ABA Bank with your test account credentials</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <config_path>payment/getloy_magento_gateway/payway_api_key_test</config_path>
+                    </field>
+                    <field id="payway_api_key_prod" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>PayWay production API key</label>
+                        <comment>You will receive this key from ABA Bank after completing the tests</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <config_path>payment/getloy_magento_gateway/payway_api_key_prod</config_path>
+                    </field>
+                </group>
+                
+                <group id="getloy_magento_gateway_advanced" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Advanced settings</label>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="10" showInDefault="9"
+                        showInWebsite="1" showInStore="0">
+                        <label>Payment From Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/getloy_magento_gateway/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="20" showInDefault="1"
+                        showInWebsite="1" showInStore="0">
+                        <label>Payment From Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <config_path>payment/getloy_magento_gateway/specificcountry</config_path>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
+                        showInStore="0">
+                        <label>Sort Order</label>
+                        <frontend_class>validate-number</frontend_class>
+                        <config_path>payment/getloy_magento_gateway/sort_order</config_path>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

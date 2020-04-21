@@ -1,0 +1,23 @@
+.payment-method-logos {
+  list-style: none;
+  margin: 0 -2px;
+  padding: 0;
+}
+
+.payment-method-logos:before {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.payment-method-logos li {
+  display: inline-block;
+  padding: 8px 2px;
+  margin: 0;
+}
+
+.payment-method-logos img {
+  height: 32px;
+  box-shadow: 0 0 2px #000;
+  border-radius: 3px;
+}

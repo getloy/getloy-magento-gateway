@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Getloy\GetloyMagentoGateway\Api\PaymentManagementInterface" type="Getloy\GetloyMagentoGateway\Model\PaymentManagement" />
+
+    <!-- Payment Method Facade configuration -->
+    <virtualType name="GetloyMagentoGatewayFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">Getloy\GetloyMagentoGateway\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Getloy\GetloyMagentoGateway\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">GetloyMagentoGatewayValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">GetloyMagentoGatewayValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">GetloyMagentoGatewayCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Validator pool -->
+    <virtualType name="GetloyMagentoGatewayValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="country" xsi:type="string">GetloyMagentoGatewayCountryValidator</item>
+                <item name="currency" xsi:type="string">GetloyMagentoGatewayCurrencyValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="GetloyMagentoGatewayCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">GetloyMagentoGatewayConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="GetloyMagentoGatewayCurrencyValidator" type="Getloy\GetloyMagentoGateway\Gateway\Validator\CurrencyValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">GetloyMagentoGatewayConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Configuration reader -->
+    <type name="Getloy\GetloyMagentoGateway\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Getloy\GetloyMagentoGateway\Model\Ui\ConfigProvider::CODE</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="GetloyMagentoGatewayConfig" type="Getloy\GetloyMagentoGateway\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Getloy\GetloyMagentoGateway\Model\Ui\ConfigProvider::CODE</argument>
+        </arguments>
+    </virtualType>
+
+
+    <!-- Logger, initialized with GetloyMagentoGatewayConfig -->
+    <virtualType name="GetloyMagentoGatewayLogger" type="Magento\Payment\Model\Method\Logger">
+        <arguments>
+            <argument name="config" xsi:type="object">GetloyMagentoGatewayConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Commands infrastructure -->
+    <virtualType name="GetloyMagentoGatewayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+            </argument>
+        </arguments>
+    </virtualType>    
+    <!-- Value handlers infrastructure -->
+    <virtualType name="GetloyMagentoGatewayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">GetloyMagentoGatewayConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GetloyMagentoGatewayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">GetloyMagentoGatewayConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Block configuration -->
+    <type name="Getloy\GetloyMagentoGateway\Block\Info">
+        <arguments>
+            <argument name="config" xsi:type="object">GetloyMagentoGatewayConfig</argument>
+        </arguments>
+    </type>
+</config>
