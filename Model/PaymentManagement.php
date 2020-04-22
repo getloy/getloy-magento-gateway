@@ -252,16 +252,25 @@ class PaymentManagement implements PaymentManagementInterface
             $paymentMethod
         );
 
+        $payload = $this->generatePayload($quote, $orderId);
+        
         /**
          * @var \Magento\Sales\Model\Order
          */
         $order = $this->orderRepository->get($orderId);
 
-        $order->addStatusHistoryComment(__('PayWay payment session started.'))
+        $payment = $order->getPayment();
+        $payment->setTransactionId($payload['tid']);
+        $payment->setAdditionalInformation('getloy_transaction_id', $payload['tid']);
+        $payment->setAdditionalInformation('getloy_payment_method', 'PayWay');
+        $payment->setAdditionalInformation('getloy_method_variant', 'default');
+        $payment->save();
+
+        $order->addStatusHistoryComment(__('%1 payment session started.', 'PayWay'))
             ->save();
 
         return [ [
-            'payload' => $this->generatePayload($quote, $orderId),
+            'payload' => $payload,
         ] ];
     }
 
@@ -303,10 +312,6 @@ class PaymentManagement implements PaymentManagementInterface
             return new CallbackResponse('failed', 'invalid transaction status');
         }
 
-        if (!$this->validateTransactionId($tid, $orderId)) {
-            return new CallbackResponse('failed', 'order ID mismatch');
-        }
-
         try {
             /**
              * @var \Magento\Sales\Model\Order 
@@ -314,6 +319,16 @@ class PaymentManagement implements PaymentManagementInterface
             $order = $this->orderRepository->get((int) $orderId);
         } catch (\Exception $e) {
             return new CallbackResponse('failed', 'quote does not exist');
+        }
+
+        /**
+         * @var \Magento\Sales\Model\Order\Payment 
+         */
+        $payment = $order->getPayment();
+        $orderTid = $payment->getAdditionalInformation()['getloy_transaction_id'];
+
+        if (!$this->validateTransactionId($tid, $orderId) || $tid !== $orderTid) {
+            return new CallbackResponse('failed', 'order ID mismatch');
         }
 
         $totalAmount = round($order->getGrandTotal(), 2);
@@ -332,17 +347,8 @@ class PaymentManagement implements PaymentManagementInterface
             )
         );
 
-        /**
-         * @var \Magento\Sales\Model\Order\Payment 
-         */
-        $payment = $order->getPayment();
-
-        $payment->setTransactionId($tid);
         $payment->setCurrencyCode($callbackDetails->currency());
         $payment->registerCaptureNotification($callbackDetails->amountPaid());
-        $payment->setAdditionalInformation('getloy_transaction_id', $tid);
-        $payment->setAdditionalInformation('getloy_payment_method', 'PayWay');
-        $payment->setAdditionalInformation('getloy_method_variant', 'default');
         $payment->save();
 
         /**
